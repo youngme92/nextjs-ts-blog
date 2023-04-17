@@ -1,0 +1,44 @@
+---
+title: Electron 에서 소스 코드 static 파일을 클라이언트 PC에 저장하기
+date: '2023-03-17'
+tags: ['Electron']
+draft: false
+summary: 일렉트론 앱에서 버튼을 클릭하면 asset 폴더안에 파일이 다운로드 될 수 있도록 처리 
+---
+
+## 목적
+
+일렉트론 앱에서 버튼을 클릭하면 asset 폴더안에 파일이 다운로드 될 수 있도록 처리 
+
+## 과정
+
+```js
+ipcMain.on("pdfDownload", (event) => {
+  const filePath = dialog.showSaveDialogSync({
+    defaultPath: `Example.pdf`,
+    filters: [
+      { name: "PDF", extensions: ["pdf"] },
+      { name: "All Files", extensions: ["*"] },
+    ],
+  });
+
+  if (!filePath) {
+    return;
+  }
+
+  const sourcePath = path.join(__static, "Example.pdf");
+  const destinationPath = path.resolve(filePath);
+  log.info(sourcePath, destinationPath);
+  fs.copyFile(sourcePath, destinationPath, (err) => {
+    if (err) {
+      console.error(err);
+    } else {
+      log.info("File has been downloaded!");
+    }
+  });
+});
+```
+
+## 결과
+
+다운로드 잘 처리됨.

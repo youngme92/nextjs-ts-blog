@@ -1,0 +1,39 @@
+---
+title: 시작날짜 와 종료날짜 사이 날짜 구하는 함수 (feat. momentjs)
+date: '2023-03-13'
+tags: ['javascript', 'code']
+draft: false
+summary: 시작날짜와 종료일자를 입력하면 사이에 날짜를 배열로 만들어야 합니다.
+---
+
+## 목적
+
+시작날짜와 종료일자를 입력하면 사이에 날짜를 배열로 만들어야 합니다.
+
+## 과정
+
+```js
+ /**
+     *
+     * @param {moment} startDate
+     * @param {moment} endDate
+     * @returns startDate와 endDate 사이 날짜의 배열 리턴
+     */
+    setDateLabel(startDate, endDate) {
+      const days = endDate.diff(startDate, 'days');
+      const dayRange = Array.from({ length: days + 1 }, (_, i) => i);
+      const dateArray = dayRange.map((day) => {
+        const date = moment(startDate).add(day, 'days');
+        return date.format('YYYY-MM-DD');
+      });
+      return dateArray;
+    },
+```
+
+## 결과
+```js
+const result = setDateLabel('2023-03-06', '2023-03-13')
+
+console.log(result)
+// ["2023-03-06","2023-03-07","2023-03-08","2023-03-09","2023-03-10","2023-03-11","2023-03-12","2023-03-13"]
+```

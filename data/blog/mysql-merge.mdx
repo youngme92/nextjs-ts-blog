@@ -1,0 +1,32 @@
+---
+title: MYSQL 중복 제거 하고 테이블 병합하는 방법
+date: '2023-03-15'
+tags: ['MYSQL']
+draft: false
+summary: MYSQL에서 SQL문을 사용하여, 각각 컬럼 개수는 다르지만 특정 컬럼을 모두 가지고 있는 세개의 테이블(A,B,C)을 병합해야한다.
+---
+
+## 목적
+MYSQL에서 SQL문을 사용하여,
+
+각각 컬럼 개수는 다르지만 특정 컬럼을 모두 가지고 있는 세개의 테이블(A,B,C)을 병합해야한다.
+
+특정 컬럼은 `name`, `email`
+
+## 과정
+
+`NOT IN`과 `UNION ALL`을 사용하여 중복을 제거하고 병합한다.
+```sql
+With D as (
+ Select (컬럼 개수가 다르기때문에 동일한 컬럼개수 맞추기) from B where (name, email) not In (select name, email from C)
+Union all
+Select (컬럼 개수가 다르기때문에 동일한 컬럼개수 맞추기) from C
+)
+
+Select * from A where (name, email) not In (select name, email from D)
+Union all
+Select * from D
+```
+## 결과
+
+중복이 제거된 채로 세개의 테이블이 병합된다.

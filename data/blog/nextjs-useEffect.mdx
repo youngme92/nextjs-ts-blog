@@ -1,0 +1,54 @@
+---
+title: nextJs useEffect 두번 렌더링되는 현상
+date: '2023-04-14'
+tags: ['nextJs']
+draft: false
+summary: nextJs 와 React 를 사용하면서 useEffect를 사용하면 두번 렌더링 되는 현상이 발견되었습니다. 이를 해결하기 위한 방법을 정리합니다.
+---
+
+## 목적
+
+nextJs 와 React 를 사용하면서 useEffect를 사용하면 두번 렌더링 되는 현상이 발견되었습니다.
+
+이를 해결하기 위한 방법을 정리합니다.
+
+## 과정
+
+```ts
+import { useEffect } from "react";
+
+const Home = () => {
+  useEffect(() => {
+    console.log('useEffect 호출.');
+  }, []);
+  return (
+   <> 
+   <>
+  );
+};
+```
+이와 같이 useEffect를 사용하면 해당 컴포넌트가 렌더링 될때 처음 한번만 실행되어야 하지만 두번 실행되었고 
+*원인은 **react의 strictMode 가 활성화 되어있으면 개발모드에선 구성요소를 두번 렌더링하기때문**
+
+해결방법은 next.config.js 에서 reactStrictMode 값을 비활성화 하면 됩니다.
+
+#### next.config.js
+```js
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  reactStrictMode: false,
+};
+
+module.exports = nextConfig;
+
+```
+## 결과
+
+*하지만 strict 모드는 안전하지 않은 수명 주기, 레거시 API 사용 및 기타 여러 기능을
+
+식별하는 데 도움을 준다고 하니 특별한 경우가 아니면 활성화 시켜두는게 좋을듯 합니다.
+
+---
+*[react의 strictMode에 관한 stackoverflow 답변 ](https://stackoverflow.com/questions/60618844/react-hooks-useeffect-is-called-twice-even-if-an-empty-array-is-used-as-an-ar)
+
+*[react strictMode 공식문서](https://ko.reactjs.org/docs/strict-mode.html)

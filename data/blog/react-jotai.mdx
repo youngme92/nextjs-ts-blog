@@ -1,0 +1,69 @@
+---
+title: 상태관리 라이브러리 jotai에 대해
+date: '2023-04-12'
+tags: ['jotai']
+draft: false
+summary: 최근에 많은 사용자들에게 인기를 끌고 있는 Jotai는 React를 위한 상태 관리 라이브러리입니다.
+---
+
+최근에 많은 사용자들에게 인기를 끌고 있는 Jotai는 React를 위한 상태 관리 라이브러리입니다.
+
+### Jotai란
+Jotai는 2020년 Pedro Nauck에 의해 처음 소개된 React를 위한 상태 관리 라이브러리로, Redux나 MobX와 같은 다른 인기있는 상태 관리 라이브러리의 대안으로 등장하게 되었습니다. Jotai의 주요 아이디어는 최소한의 API를 제공하여 React에서 상태 관리를 간단하게 만드는 것입니다.
+
+### Jotai는 어떻게 작동할까
+Jotai는 상태를 나타내기 위해 Atom을 사용합니다. Atom은 React의 내장 useState 훅과 유사하지만, 몇 가지 중요한 차이점이 있습니다. Atom은 여러 컴포넌트에서 사용할 수 있으며, 더 복잡한 상태 관리를 만들기 위해 조합할 수 있습니다. 또한 Atom은 async이며 외부 소스에서 데이터를 가져올 수 있습니다.
+
+Jotai에서 Atom은 atom 함수를 사용하여 생성됩니다. 다음은 counter에 대한 atom을 생성하는 예입니다:
+
+```javascript
+import { atom } from 'jotai';
+
+const counterAtom = atom(0);
+```
+atom 함수는 초기값을 인수로 사용하고, 상태를 가져오고 설정할 수 있는 Atom 객체를 반환합니다.
+
+Jotai를 사용하는 방법은 어떻게 되나요?
+Jotai를 사용하려면 먼저 npm 또는 yarn을 사용하여 설치해야 합니다.
+
+```bash
+npm install jotai
+```
+또는
+
+```bash
+yarn add jotai
+```
+설치가 완료되면 React 컴포넌트에서 Jotai를 사용할 수 있습니다. 다음은 앞서 생성한 counterAtom을 컴포넌트에서 사용하는 예입니다:
+
+```javascript
+import { useAtom } from 'jotai';
+
+function Counter() {
+  const [count, setCount] = useAtom(counterAtom);
+
+  function increment() {
+    setCount((c) => c + 1);
+  }
+
+  return (
+    <div>
+      <p>Count: {count}</p>
+      <button onClick={increment}>Increment</button>
+    </div>
+  );
+}
+```
+이 예제에서는 useAtom 훅을 사용하여 상태에 접근하고 setCount 함수를 사용하여 상태를 업데이트합니다. setCount 함수가 호출될 때마다 counterAtom을 사용하는 모든 컴포넌트가 리랜더링됩니다.
+
+### Jotai의 장점
+**Jotai는 React에서 상태를 간단하게 관리할 수 있도록 해주는 최소한의 API를 제공합니다. 따라서 Redux와 같은 다른 상태 관리 라이브러리보다 더 가볍고 간단하게 사용할 수 있습니다.** 또한 Atom은 여러 컴포넌트에서 사용할 수 있으므로, Redux와 같이 중앙 집중식 저장소에 모든 상태를 보관하는 것보다 더 유연하게 상태를 관리할 수 있습니다. 따라서 React 프로젝트에서 상태 관리를 간단하게 하고자 할 때 Jotai는 좋은 선택이 될 수 있습니다.
+
+### Jotai를 사용할 때 고려해야 할 점
+Jotai는 아직 상대적으로 새로운 라이브러리이며, 커뮤니티가 크지 않습니다. 또한 Redux와 같은 다른 상태 관리 라이브러리보다 덜 검증되었습니다. 따라서 Jotai를 사용하기 전에 프로젝트의 요구 사항과 함께 검토해 보는 것이 좋습니다.
+
+### Jotai의 예제
+[Jotai의 공식 문서](https://github.com/pmndrs/jotai)에는 Jotai를 사용하는 다양한 예제가 포함되어 있습니다. 또한 GitHub에서 Jotai의 소스 코드를 볼 수 있으며, 다른 사용자들이 공유한 Jotai를 사용하는 예제를 찾을 수도 있습니다.
+
+### Jotai 평가
+Jotai는 최근에 출시된 라이브러리이지만, 이미 많은 사용자들에게 인기를 끌고 있습니다. Jotai를 사용하는 개발자들은 Redux나 MobX보다 더 가볍고 간단하다는 것을 강조하고 있으며, 상태 관리를 더 쉽게 만들어 준다는 것을 언급하고 있습니다.
