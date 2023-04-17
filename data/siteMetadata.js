@@ -8,7 +8,7 @@ const siteMetadata = {
   description: 'welcome to piano cat studio',
   language: 'en-us',
   theme: 'system', // system, dark or light
-  siteUrl: 'https://tailwind-nextjs-starter-blog.vercel.app',
+  siteUrl: 'https://youngme92.vercel.app',
   siteRepo: 'https://github.com/youngme92/nextjs-ts-blog',
   siteLogo: '/static/images/logo.png',
   image: '/static/images/avatar.png',
