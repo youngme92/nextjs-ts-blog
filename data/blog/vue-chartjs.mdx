@@ -1,0 +1,142 @@
+---
+title: vue2에서 vue-chartjs 사용하기
+date: '2023-03-13'
+tags: ['vue', 'chartjs']
+draft: false
+summary: vue2로 개발 된 관리자페이지 프로젝트에서 차트를 구현이 필요해 vue-chartjs 오픈소스를 쓰게 되었다.
+---
+
+## 목적
+
+vue2로 개발 된 관리자페이지 프로젝트에서 차트를 구현이 필요해 vue-chartjs 오픈소스를 쓰게 되었다.
+
+## 과정
+
+Line 차트를 쓸 예정이며, 컴포넌트로 만들어서 props으로 데이터를 유동적으로 변경되도록 구성한다.
+
+#### /components/LineChartGenerator.vue
+```js
+<template>
+  <LineChartGenerator
+    :chart-options="chartOptions"
+    :chart-data="chartData"
+    :chart-id="chartId"
+    :dataset-id-key="datasetIdKey"
+    :plugins="plugins"
+    :css-classes="cssClasses"
+    :styles="styles"
+    :width="width"
+    :height="height"
+  />
+</template>
+<script>
+import { Line as LineChartGenerator } from 'vue-chartjs/legacy';
+
+import {
+  Chart as ChartJS,
+  Title,
+  Tooltip,
+  Legend,
+  LineElement,
+  LinearScale,
+  CategoryScale,
+  PointElement,
+} from 'chart.js';
+
+ChartJS.register(Title, Tooltip, Legend, LineElement, LinearScale, CategoryScale, PointElement);
+
+export default {
+  components: {
+    LineChartGenerator,
+  },
+  props: {
+    chartData: {
+      type: Object,
+      default: () => {},
+    },
+    chartOptions: {
+      type: Object,
+      default: () => {},
+    },
+    chartId: {
+      type: String,
+      default: 'line-chart',
+    },
+    datasetIdKey: {
+      type: String,
+      default: 'label',
+    },
+    width: {
+      type: Number,
+      default: 400,
+    },
+    height: {
+      type: Number,
+      default: 400,
+    },
+    cssClasses: {
+      default: '',
+      type: String,
+    },
+    styles: {
+      type: Object,
+      default: () => {},
+    },
+    plugins: {
+      type: Array,
+      default: () => [],
+    },
+  },
+};
+</script>
+
+<style>
+</style>
+```
+
+#### /Statistics.vue
+
+```js
+<template>
+  <div>
+    <LineChartGenerator :chartData="chartData" :options="chartOptions" :height="150" />
+  </div>
+</template>
+
+<script>
+import LineChartGenerator from '/components/LineChartGenerator';
+export default {
+  data() {
+    return {
+      chartData: {
+        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+        datasets: [
+          {
+            label: 'Data One',
+            backgroundColor: '#f87979',
+            data: [40, 39, 10, 40, 39, 80, 40],
+          },
+        ],
+      },
+      chartOptions: {
+        responsive: true,
+        maintainAspectRatio: false,
+      },
+    };
+  },
+
+  mounted() {},
+
+  methods: {},
+};
+</script>
+
+<style lang="scss" scoped>
+</style>
+```
+
+## 결과
+
+<img width="1125" alt="스크린샷 2023-03-13 오후 2 33 51" src="https://user-images.githubusercontent.com/50010735/224616258-aedfcdd4-4251-412f-9d7b-b112a2e5d6df.png" />
+
+
