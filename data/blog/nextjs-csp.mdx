@@ -1,0 +1,107 @@
+---
+title: nextJs CSP (Content-Security-Policy) 간단하게 설정하기
+date: '2023-04-19'
+tags: ['nextJs']
+draft: false
+summary: CSP란 교차 사이트 스크립팅(XSS (en-US))과 데이터 주입 공격을 비롯한 특정 유형의 공격을 탐지하고 완화하는 데 도움이 되는 추가 보안 계층입니다 
+---
+
+## 목적
+
+**CSP**란 교차 사이트 스크립팅([XSS (en-US)](https://developer.mozilla.org/en-US/docs/Glossary/Cross-site_scripting))과 데이터 주입 공격을 비롯한 특정 유형의 공격을 탐지하고 완화하는 데 도움이 되는 추가 보안 계층입니다
+
+콘텐츠 보안 정책 없이 웹 개발을 할 수는 있지만 여러 보안공격에 취약하게 되니 되도록이면 설정해 주는게 좋을 것 같습니다.
+
+## 과정
+
+구현 방법은 웹서버에서 [Content-Security-Policy (en-US)](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy) HTTP 헤더를 반환하도록 구현 할 수 있습니다.
+
+또는 클라이언트에서 헤더에 설정하여 구현 하는 방법도 있습니다.
+
+저는 두번째 방법으로 진행했습니다.
+
+사용 사례를 보면
+
+```http
+Content-Security-Policy: default-src 'self'
+```
+```http
+Content-Security-Policy: default-src 'self' example.com *.example.com
+```
+```http
+Content-Security-Policy: default-src 'self'; img-src *; media-src example.org example.net; script-src userscripts.example.com
+```
+```http
+Content-Security-Policy: default-src https://onlinebanking.example.com
+```
+```http
+Content-Security-Policy: default-src 'self' *.example.com; img-src *
+```
+
+이와 같이 사용되며, 자세한 설명은 생략합니다. *([MDN](https://developer.mozilla.org/ko/docs/Web/HTTP/CSP)에 자세히 설명되어 있습니다.)
+
+nextJs 에 적용한 방법은 아래와 같습니다.
+
+#### next.config.js
+```jsx
+const ContentSecurityPolicy = `
+  default-src 'self';
+  script-src 'self' 'unsafe-eval' 'unsafe-inline' giscus.app www.googletagmanager.com;
+  style-src 'self' 'unsafe-inline';
+  img-src * blob: data:;
+  media-src 'none';
+  connect-src *;
+  font-src 'self';
+  frame-src giscus.app
+`
+const securityHeaders = [
+  // https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP
+  {
+    key: 'Content-Security-Policy',
+    value: ContentSecurityPolicy.replace(/\n/g, ''),
+  },
+  // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy
+  {
+    key: 'Referrer-Policy',
+    value: 'strict-origin-when-cross-origin',
+  },
+  // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options
+  {
+    key: 'X-Frame-Options',
+    value: 'DENY',
+  },
+  // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Content-Type-Options
+  {
+    key: 'X-Content-Type-Options',
+    value: 'nosniff',
+  },
+  // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-DNS-Prefetch-Control
+  {
+    key: 'X-DNS-Prefetch-Control',
+    value: 'on',
+  },
+  // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security
+  {
+    key: 'Strict-Transport-Security',
+    value: 'max-age=31536000; includeSubDomains',
+  },
+  // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Feature-Policy
+  {
+    key: 'Permissions-Policy',
+    value: 'camera=(), microphone=(), geolocation=()',
+  },
+]
+
+module.exports = {
+  async headers() {
+    return [
+      {
+        source: '/(.*)',
+        headers: securityHeaders,
+      },
+    ]
+  },
+}
+
+
+```
