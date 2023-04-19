@@ -79,6 +79,9 @@ const siteMetadata = {
   //     indexName: 'docsearch',
   //   },
   // },
+  views: {
+    provider: 'busuanzi',
+  },
 }
 
 module.exports = siteMetadata
