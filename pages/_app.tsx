@@ -13,6 +13,7 @@ import siteMetadata from '@/data/siteMetadata'
 import { Analytics } from 'pliny/analytics'
 import { SearchProvider } from 'pliny/search'
 import LayoutWrapper from '@/components/LayoutWrapper'
+import Script from 'next/script'
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
@@ -20,6 +21,24 @@ export default function App({ Component, pageProps }: AppProps) {
       <Head>
         <meta content="width=device-width, initial-scale=1" name="viewport" />
       </Head>
+      {/* Google tag (gtag.js) */}
+      {/* <Script
+        async
+        src={`https://www.googletagmanager.com/gtag/js?id=${siteMetadata.analytics.googleAnalyticsId}`}
+      ></Script>
+      <Script
+        id="gtag-init"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{
+          __html: `
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+
+                gtag('config', '${siteMetadata.analytics.googleAnalyticsId}');
+                `,
+        }}
+      /> */}
       <Analytics analyticsConfig={siteMetadata.analytics} />
       <LayoutWrapper>
         <SearchProvider searchConfig={siteMetadata.search}>
