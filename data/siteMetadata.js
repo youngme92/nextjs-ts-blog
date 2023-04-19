@@ -28,7 +28,7 @@ const siteMetadata = {
     simpleAnalytics: false, // true or false
     umamiWebsiteId: '', // e.g. 123e4567-e89b-12d3-a456-426614174000
     posthogProjectApiKey: '', // e.g. AhnJK8392ndPOav87as450xd
-    googleAnalyticsId: '', // e.g. UA-000000-2 or G-XXXXXXX
+    googleAnalyticsId: 'G-R7RPEXYJJ2', // e.g. UA-000000-2 or G-XXXXXXX
   },
   newsletter: {
     // supports mailchimp, buttondown, convertkit, klaviyo, revue, emailoctopus
@@ -79,9 +79,9 @@ const siteMetadata = {
   //     indexName: 'docsearch',
   //   },
   // },
-  views: {
-    provider: 'busuanzi',
-  },
+  // views: {
+  //   provider: 'busuanzi',
+  // },
 }
 
 module.exports = siteMetadata
