@@ -15,7 +15,14 @@ summary: 개발일지 기록, 정보공유를 위해서 개발블로그를 만�
 NextJs를 선택하게 된 이유는 요즘 핫한 기술이기도 하고, 정적페이지인 블로그 프로젝트에 적합할 것 같았다.
 
 ## 과정
-Blog 사이트는 `*Pliny`를 사용하여 제작하였다.
+
+<img width="1305" alt="스크린샷 2023-04-20 오전 11 09 30" src="https://user-images.githubusercontent.com/50010735/233239693-08aa36de-b5e0-4ddb-8c26-73b0b2a47545.png" />
+
+vercel 에서는 nextJs를 활용한 여러 템플릿들을 지원한다. 그중  [Tailwind CSS Blog](https://vercel.com/templates/next.js/tailwind-css-starter-blog) 템플릿을 사용해보았다.
+
+
+
+Blog 사이트는 생성하는 방법은 아래와 같다.
 
 ```bash
 npm i -g @pliny/cli
@@ -29,14 +36,6 @@ npx degit 'timlrx/tailwind-nextjs-starter-blog#contentlayer'
 
 위 순서 대로 실행하면 블로그를 단번에 만들 수 있다.
 
-### 구현해보면서 알게 된 내용을 정리
-
-Pilny 모듈은 `nextjs`과 `tailwind`기반으로 `markdown/mdx` 파일을 쉽게 관리 할 수 있었다. 
-
-파일 마다 모듈을 사용한 부분이 많이 보였고 그 부분을 자세히 파악하진 못했지만 문서나 영상을 보니 블로그와 같은 개발에 유용해 보였다.
-
-<img width="734" alt="스크린샷 2023-04-18 오후 4 17 52" src="https://user-images.githubusercontent.com/50010735/232701973-f311458e-9055-4409-a54f-7b37b9479106.png" />
-
 ### 이후에 추가로 개발 예정항목
 
 댓글기능과, 뉴스레터 구독기능 등, 블로그에 필요한 요소를 하나씩 추가로 개발할 예정이다.
@@ -47,8 +46,5 @@ Pilny 모듈은 `nextjs`과 `tailwind`기반으로 `markdown/mdx` 파일을 쉽�
 
 ---
 
-*[Pliny](https://github.com/timlrx/pliny) 는 [contentlayer](https://github.com/contentlayerdev/contentlayer) , TS/JS 및 다양한 패키지 관리자의 선택적 선택, 앞으로 템플릿의 기반이 될 더 많은 모듈화된 구성 요소를 포함하는 업데이트된 버전의 블로그를 지원합니다.
-
 _(참고자료)_
-
 [Tailwind CSS Blog starter](https://vercel.com/templates/next.js/tailwind-css-starter-blog)
