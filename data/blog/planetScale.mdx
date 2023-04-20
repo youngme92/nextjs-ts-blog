@@ -1,0 +1,137 @@
+---
+title: PlanetScale 로 serverless DB (MySQL) 구축하기
+date: '2023-04-20'
+tags: ['planetScale']
+draft: false
+summary: vercel 에서 제공하는 템플릿중에 관리자 페이지가 있어서 한번 사용해 보았다. 사용한 스택에 데이터베이스로 PlanetScale 이 있어서 궁금해서 구글링하여 찾아보았다.
+---
+
+## 목적
+
+<img width="1279" alt="스크린샷 2023-04-20 오후 5 39 54" src="https://user-images.githubusercontent.com/50010735/233310169-065a2825-ddd0-4bfd-abbe-44eeaa16b662.png" />
+
+vercel 에서 제공하는 템플릿중에 관리자 페이지가 있어서 한번 사용해 보았다.
+
+사용한 스택에 데이터베이스로 PlanetScale 이 있어서 궁금해서 구글링하여 찾아보았다.
+
+### PlanetScale
+
+MySQL 호환의 serverless 데이터베이스를 구축할수 있는 점이 강점이다.
+
+따로 DB 서버를 구현하지 않고도 DB을 사용할수 있다는게 신기했다.
+
+PlanetScale은 대규모 MySQL 데이터베이스에서 직면한 확장 문제를 해결하기 위해 [2010년 YouTube에서 발명한](https://vitess.io/docs/15.0/overview/history/#:~:text=Vitess%20was%20created%20in%202010,exceed%20the%20database's%20serving%20capacity.) 오픈 [소스 데이터베이스 기술인 Vitess](https://vitess.io/) 로 구동된다고 한다.
+
+바로 구현 과정을 보자
+
+## 과정
+
+<img width="1539" alt="스크린샷 2023-04-20 오후 5 56 55" src="https://user-images.githubusercontent.com/50010735/233314628-6d15c2fa-1691-42e9-a54c-83c9735fb7ef.png" />
+
+우선 가입을 하고 데이터 베이스를 생성한다.
+
+데이터베이스를 생성하고 난 후에 vercel과 연결시켜준다. [https://vercel.com/integrations/planetscale](https://vercel.com/integrations/planetscale)
+
+vercel과 연결한 이유는 클라이언트에서 요청할 `DATABASE_URL`을 알아야하는데 도무지 찾을수가 없었다..
+
+vercel과 연결을 하고 나서 `DATABASE_URL`을 확인할 수 있었다.
+
+<img width="1324" alt="스크린샷 2023-04-20 오후 6 04 09" src="https://user-images.githubusercontent.com/50010735/233316931-21ee6995-d124-4d2e-9b77-4a29dba750bc.png" />
+
+vercel 프로젝트의 세팅화면에서 URL을 확인하였고 클라이언트 소스코드에 입력했다.
+#### .env.local
+```bash
+DATABASE_URL=<database_url>
+```
+#### lib/planetscale.ts
+```jsx
+import 'server-only';
+import { Generated, Kysely } from 'kysely';
+import { PlanetScaleDialect } from 'kysely-planetscale';
+
+interface User {
+  id: Generated<number>;
+  name: string;
+  username: string;
+  email: string;
+}
+
+interface Database {
+  users: User;
+  // https://github.com/nextauthjs/next-auth/issues/4922
+}
+
+export const queryBuilder = new Kysely<Database>({
+  dialect: new PlanetScaleDialect({
+    url: process.env.DATABASE_URL
+  })
+});
+
+```
+
+여기서 다시한번 `Kysely`라는 생소한 모듈이 있어서 난관이 있었다
+
+`Kysely` 모듈은 ORM과 비슷하지만 직접 SQL 쿼리를 작성하는 방식으로 데이터베이스를 다루는 차이점이 있었다. 
+
+즉  `Kysely` ORM처럼 쓰지만 SQL 쿼리로 작성되어 SQL 쿼리의 성능과 최적화를 더욱 효과적으로 제어할 수 있는 모듈이다! 
+_(나중에 제대로 검토해볼 예정이다.)_
+
+그리고 조회하는 페이지 
+
+#### app/page.tsx
+
+```jsx
+import { Card, Title, Text } from '@tremor/react';
+import { queryBuilder } from '../lib/planetscale';
+import Search from './search';
+import UsersTable from './table';
+
+export const dynamic = 'force-dynamic';
+
+export default async function IndexPage({
+  searchParams
+}: {
+  searchParams: { q: string };
+}) {
+  const search = searchParams.q ?? '';
+  const users = await queryBuilder
+    .selectFrom('users')
+    .select(['id', 'name', 'username', 'email'])
+    .where('name', 'like', `%${search}%`)
+    .execute();
+  return (
+    <main className="p-4 md:p-10 mx-auto max-w-7xl">
+      <Title>Users</Title>
+      <Text>
+        A list of users retrieved from a MySQL database (PlanetScale).
+      </Text>
+      <Search />
+      <Card className="mt-6">
+        {/* @ts-expect-error Server Component */}
+        <UsersTable users={users} />
+      </Card>
+    </main>
+  );
+}
+```
+이와 같이 구성하면 클라이언트 준비 완료!
+
+하지만 현재 DB에 테이블과 데이터가 없기때문에 임의의 데이터를 넣어준다.
+
+<img width="1551" alt="스크린샷 2023-04-20 오후 6 14 58" src="https://user-images.githubusercontent.com/50010735/233319466-d7220a22-d8eb-4871-9429-927b6326dd1c.png" />
+
+PlanetScale 콘솔화면에 접속하여 직접 테이블 생성하고 데이터도 생성하여 넣어주자.  [SQL문 작성예시 참고](https://planetscale.com/docs/tutorials/planetscale-quick-start-guide)
+
+그리고 조회하면 insites 화면에 요청한 쿼리를 로그로 볼수도 있다!
+
+<img width="1940" alt="스크린샷 2023-04-20 오후 6 16 45" src="https://user-images.githubusercontent.com/50010735/233319878-c8603b5b-4689-49c0-bfff-b4ff74caff88.png" />
+
+## 결과
+
+<img width="1387" alt="스크린샷 2023-04-20 오후 6 20 14" src="https://user-images.githubusercontent.com/50010735/233320790-bb59862e-02ac-4013-b2b4-b0243fa0f2e9.png" />
+
+올바르게 조회된 데이터를 확인할 수 있다!
+
+#### + 이후에 production 모드로 변경하는 작업도 추가로 해야하는 듯하다..
+
+<img width="867" alt="스크린샷 2023-04-20 오후 6 22 48" src="https://user-images.githubusercontent.com/50010735/233321550-aecccd47-fa41-429f-88c1-f556cdb03087.png" />
