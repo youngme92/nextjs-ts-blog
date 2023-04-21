@@ -81,17 +81,17 @@ module.exports = () => {
 
       return config
     },
-    async rewrites() {
-      return [
-        {
-          source: '/sitemap.xml',
-          destination: '/sitemap',
-        },
-        {
-          source: '/feed.xml',
-          destination: '/feed',
-        },
-      ]
-    },
+    // async rewrites() {
+    //   return [
+    //     {
+    //       source: '/sitemap.xml',
+    //       destination: '/sitemap.xml',
+    //     },
+    //     {
+    //       source: '/feed.xml',
+    //       destination: '/feed.xml',
+    //     },
+    //   ]
+    // },
   })
 }
