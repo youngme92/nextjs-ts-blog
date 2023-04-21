@@ -1,0 +1,62 @@
+---
+title: PlanetScale CLI로 간단하게 DB 생성 및 수정하기
+date: '2023-04-21'
+tags: ['planetScale']
+draft: false
+summary: 지난 시간에 PlanetScale 세팅을 해보았다. PlanetScale은 terminal 에서 git을 쓰듯이 디비에 접속하여 수정 및 생성 할 수 있고, DB툴에 연결해서 사용할 수도 있다.
+---
+
+## 목적
+
+지난 시간에 PlanetScale 세팅을 해보았다.
+
+PlanetScale은 terminal 에서 git을 쓰듯이 디비에 접속하여 수정 및 생성 할 수 있고, DB툴에 연결해서 사용할 수도 있다.
+
+바로 확인해 보자
+
+## 과정
+
+```bash
+pscale auth login
+```
+
+우선 로그인을 진행한다.
+
+위 명령어를 입력하면 계정을 확인하는 웹이 열리고 확인버튼을 누르게 되면 로그인이 완료되었다는 문구가 나타난다.
+
+```bash
+pscale shell <project-name> main
+```
+
+그리고 나서 프로젝트에 접속하면 DB 접속완료!
+
+이제 명령어를 통해 SQL문을 사용할 수있다.
+
+<img width="394" alt="스크린샷 2023-04-21 오전 11 12 19" src="https://user-images.githubusercontent.com/50010735/233524434-ba7e9c73-936c-4f69-8488-6ad49f1db628.png" />
+
+### DB 툴에 연결하는 방법
+
+```bash
+pscale connect <project-name> main --port 3309
+```
+port 는 자유롭게 입력해도 된다.
+
+위 명령어를 입력하면
+
+<img width="579" alt="스크린샷 2023-04-21 오전 11 18 00" src="https://user-images.githubusercontent.com/50010735/233525124-d0cb81e2-b413-42d0-a233-e9a46fe2e92d.png" />
+
+로컬주소로 디비가 세팅된걸 볼수가 있다.
+
+위 주소로 디비툴 (DBeaver, 다른 디비 툴도 가능)로 접속해보면 
+
+<img width="887" alt="스크린샷 2023-04-21 오전 11 20 54" src="https://user-images.githubusercontent.com/50010735/233525533-b5f8b81e-c954-4fe3-8e82-05d0b492db63.png" />
+
+<img width="1323" alt="스크린샷 2023-04-21 오전 11 21 46" src="https://user-images.githubusercontent.com/50010735/233525586-d83d1333-52a7-4a2d-8779-726302d9e6fc.png" />
+
+잘 접속이 된게 확인 된다.
+
+놀라운건 디비 툴안에서 수정이 일어나면 자동으로 업데이트 되어 반영이 된다!
+
+## 결과
+
+<img width="1002" alt="스크린샷 2023-04-21 오전 11 24 31" src="https://user-images.githubusercontent.com/50010735/233525865-63cef39c-45d2-4ff8-936d-517e2b13ef73.png" />
