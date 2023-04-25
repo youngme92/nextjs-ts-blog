@@ -11,14 +11,12 @@ export default function Footer() {
     <footer>
       <div className="mt-16 flex flex-col items-center">
         <div className="mb-3 space-x-4">
+          {/* image 변환 빌드할때 문제 있음 */}
           {/* <Link href={reviewCountLink}>
             <Image width={100} height={100} alt="Hits" src={reviewCountImage} />
           </Link> */}
-          <a href="https://hits.sh/youngme92.vercel.app/">
-            <img
-              alt="Hits"
-              src="https://hits.sh/youngme92.vercel.app.svg?view=today-total&label=today%20%2F%20total&color=1cbca5"
-            />
+          <a href={reviewCountLink} target="_blank" rel="noreferrer">
+            <img alt="Hits" src={reviewCountImage} />
           </a>
         </div>
         <div className="mb-3 flex space-x-4">
