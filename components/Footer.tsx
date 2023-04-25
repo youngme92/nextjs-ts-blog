@@ -11,9 +11,15 @@ export default function Footer() {
     <footer>
       <div className="mt-16 flex flex-col items-center">
         <div className="mb-3 space-x-4">
-          <Link href={reviewCountLink}>
+          {/* <Link href={reviewCountLink}>
             <Image width={100} height={100} alt="Hits" src={reviewCountImage} />
-          </Link>
+          </Link> */}
+          <a href="https://hits.sh/youngme92.vercel.app/">
+            <img
+              alt="Hits"
+              src="https://hits.sh/youngme92.vercel.app.svg?view=today-total&label=today%20%2F%20total&color=1cbca5"
+            />
+          </a>
         </div>
         <div className="mb-3 flex space-x-4">
           <SocialIcon kind="mail" href={`mailto:${siteMetadata.email}`} size={6} />
