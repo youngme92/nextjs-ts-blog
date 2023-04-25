@@ -81,6 +81,16 @@ module.exports = () => {
 
       return config
     },
+    images: {
+      remotePatterns: [
+        {
+          protocol: 'https',
+          hostname: 'hits.sh',
+          port: '',
+          pathname: '/**',
+        },
+      ],
+    },
     // async rewrites() {
     //   return [
     //     {

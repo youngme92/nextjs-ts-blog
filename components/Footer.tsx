@@ -1,11 +1,20 @@
 import Link from './Link'
 import siteMetadata from '@/data/siteMetadata'
 import SocialIcon from '@/components/social-icons'
+import Image from '@/components/Image'
 
 export default function Footer() {
+  const reviewCountLink = 'https://hits.sh/youngme92.vercel.app/'
+  const reviewCountImage =
+    'https://hits.sh/youngme92.vercel.app.svg?view=today-total&label=today%20%2F%20total&color=1cbca5'
   return (
     <footer>
       <div className="mt-16 flex flex-col items-center">
+        <div className="mb-3 space-x-4">
+          <Link href={reviewCountLink}>
+            <Image width={100} height={100} alt="Hits" src={reviewCountImage} />
+          </Link>
+        </div>
         <div className="mb-3 flex space-x-4">
           <SocialIcon kind="mail" href={`mailto:${siteMetadata.email}`} size={6} />
           <SocialIcon kind="github" href={siteMetadata.github} size={6} />
