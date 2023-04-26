@@ -1,0 +1,116 @@
+---
+title: '[자료구조] javascript 연결리스트'
+date: '2023-04-26'
+tags: ['javascript','code','data structure']
+draft: false
+summary: javascript 에서 연결리스트 자료구조 구현, 생성, 추가, 삭제 할때 소요되는 시간을 빅오 표기법으로 확인해보자
+---
+ 
+ 
+### javascript 에서 연결리스트 자료구조 구현, 생성, 추가, 삭제 할때 소요되는 시간을 `빅오 표기법`으로 확인해보자
+
+javascript 에서 연결리스트는 객체로 구현할 수 있다.
+
+각 요소는 노드라고 부르며, 데이터 영역, 포인터 영역으로 구성된다.
+
+### 연결리스트의 특징
+
+- 메모리가 허용하는 한 요소를 제한없이 추가 가능
+- 탐색은 O(n) 이 소요됨
+- 요소 추가 및 삭제는 O(1)이 소요됨
+- 단일 연결리스트, 다중 연결리스트, 원형 연결리스트가 존재한다
+
+### 연결리스트 종류별 특징
+
+- 단일 연결리스트
+
+Head 에서 Tail 까지 단방향으로 이어지는 연결리스트 (데이터 영역, 포인터 영역)존재
+
+- 다중 연결리스트
+
+양방향으로 이어지는 연결리스트, 단일 연결리스트보다 자료구조가 더 크다, (데이터영역, 다음노드와 이전노드) 존재
+
+- 원형 연결리스트
+
+단일, 다중 연결리스트에서 Tail이 Head로 연결되는 연결리스트, 메모리를 아낄수 있으며, 원형 큐 등 만들때 사용됨.
+
+
+#### 단일 연결리스트 구현
+
+![linked list](https://user-images.githubusercontent.com/50010735/234451590-769b8651-8c21-44c3-aa30-47d48bc1a313.png)
+
+
+```tsx
+// 단일 연결리스트 구현
+class Node {
+	constructor(value){
+		this.value = value;
+		this.next = null;
+	}
+}
+
+class SinglyLinkedList {
+	constructor(){
+		this.head = null;
+		this.tail = null;
+	}
+	// 노드 찾기
+	find(value){
+		let currNode = this.head;
+		while (currNode.value !== value){
+			currNode = currNode.next;
+		}
+		return currNode;
+	}
+	// 맨 끝 tail 에 생성
+	append(newValue){
+		const newNode = new Node(newValue);
+		if(this.head === null){
+			this.head = newNode;
+			this.tail = newNode;
+		} else {
+			this.head.next = newNode;
+			this.tail = newNode;
+		}
+	}
+        // 연결리스트 중간에 생성
+	insert(node, newValue){
+		const newNode = new Node(newValue);
+		newNode.next = node.next;
+		node.next = newNode;
+	}
+	// 노드 삭제
+	remove(value){
+		let prevNode = this.head;
+		while (prevNode.next.value !== value){
+			prevNode = prevNode.next;
+		}
+		
+		if(prevNode.next !== null){
+			prevNode.next - prevNode.next.next;
+		}
+	}
+        // 로그 출력
+	display(){
+		let currNode = this.head;
+		let displayString = "[";
+		while(currNode !== null){
+			displayString += `${currNode.value}, `;
+			currNode = currNode.next;
+		}
+		displayString = displayStrin.substr(0, displayString.length - 2);
+		displayString += "]";
+		console.log(displayString);
+	}
+}
+```
+####  + 배열 메서드 중 (push, pop, splice, reduce  ...) push, pop을 제외하고 모두 O(n) 의 시간복잡도를 가진다. 
+
+> 즉, 삽입, 삭제가 반복되는 로직은 연결리스트가 적합하다.
+
+### 적용 예시
+
+#### 순서가 중요한 데이터, 크기가 유동적인 데이터, 삽입 및 삭제가 빈번한 데이터 등
+- 순서가 중요한 데이터: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+- 크기가 유동적인 데이터: [1, 3, 5, 7, 9], [2, 4, 6, 8], [10, 20, 30, 40, 50, 60]
+- 삽입 및 삭제가 빈번한 데이터: [1, 2, 3, 4, 5], [10, 20, 30, 40]

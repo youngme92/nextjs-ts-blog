@@ -1,0 +1,51 @@
+---
+title: '[자료구조] javascript 배열'
+date: '2023-04-26'
+tags: ['javascript','code','data structure']
+draft: false
+summary: javascript 에서 배열을 생성, 추가, 삭제 할때 소요되는 시간을 `빅오 표기법`으로 확인해보자
+---
+ 
+### javascript 에서 배열을 생성, 추가, 삭제 할때 소요되는 시간을 `빅오 표기법`으로 확인해보자
+
+#### 배열 생성
+
+```js
+let arry = [1]
+for(let i= 0; i < 10; i++){
+ arry.push(0)
+}
+// 모든값의 초기값을 같은 값으로 설정할땐 fill 사용
+let arry = Array(10).fill(0)
+// 특정 로직을 사용하여 초기값을 설정 할 경우 from 사용
+let arry1 = Array.from({length: 10}, (v,i) => i);
+```
+
+리트코드에서 테스트 돌려보았을때 효율 순서 
+
+fill < from < for문 (큰 순서대로 시간복잡도가 크다.)
+
+#### 배열 요소 추가, 삭제
+
+```js
+arry = []
+arry.push(1); //  O(1)
+arry.push(2,3); // O(1)
+arry.pop(); // O(1)
+arry.splice(2, 0, 100); // O(n)
+arry.splice(2,1) // O(n)
+```
+
+####  + 배열 메서드 중 (push, pop, splice, reduce  ...) push, pop을 제외하고 모두 O(n) 의 시간복잡도를 가진다. 
+
+> 즉, 데이터의 중간에 추가,삭제가 많은 경우 **배열**은 효율적인 자료구조가 아니다.
+
+### 적용 예시
+
+#### 정렬되지 않은 데이터, 순서가 중요한 데이터, 고정된 크기의 데이터, 다차원 데이터 등
+- 정렬되지 않은 데이터: [1, 5, 2, 9, 7]
+- 순서가 중요한 데이터: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+- 고정된 크기의 데이터: [0, 0, 0, 0, 0]
+- 다차원 데이터: [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+
+
