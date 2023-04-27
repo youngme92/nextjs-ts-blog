@@ -1,0 +1,49 @@
+---
+title: '[자료구조] javascript 해시 테이블 (HASH table)'
+date: '2023-04-27'
+tags: ['javascript', 'code', 'data structure']
+draft: false
+summary: javascript 에서 해시테이블 자료구조 생성, 추가, 삭제 할때 소요되는 시간을 `빅오 표기법`으로 확인해보자
+---
+
+### javascript 에서 해시테이블 자료구조 생성, 추가, 삭제 할때 소요되는 시간을 `빅오 표기법`으로 확인해보자
+
+해시 테이블은 키와 값을 받아 키를 해싱하여 나온 Index 값에 저장하는 선형자료구조이다.
+
+삽입할때 O(1)만큼 시간복잡도가 소요되며, 키를 알고 있다면 탐색도 O(1)만큼 소요된다.
+
+해시 테이블은 javascript 에서 배열, 객체, map, set 객체로 표현가능하다.
+
+```tsx
+// 배열
+const array = []
+array['key'] = 'value'
+console.log(array['key']) // 'value'
+
+// 객체
+const object = 'value'
+console.log(object) // 'value'
+
+// map 객체
+const mapTable = new Map()
+mapTable.set('key', 'value')
+console.log(mapTable.get('key')) // 'value'
+
+// set 객체
+const setTable = new Set()
+setTable.add('key') // key 와 value 동일하게 저장
+console.log(setTable.has('key')) // true
+```
+
+map 객체와 set 객체의 특징은
+
+map 객체는 다양한 메서드를 가지고 있어서 활용도가 높다. [Map 객체 (mdn)참고](https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Map)
+
+set 객체는 key와 value가 같다 그래서 중복된 key 값이 생기지 않는다. (중복이 없는 데이터일때 활용가능) [Set 객체 (mdn)참고](https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Set)
+
+### 활용 예시
+
+#### 해시 테이블(Hash Table): 검색 및 삽입이 빈번한 데이터, 키와 값의 쌍으로 이루어진 데이터 등
+
+- 검색 및 삽입이 빈번한 데이터: 전화번호부, 사전 등
+- 키와 값의 쌍으로 이루어진 데이터: `{'apple': 1000, 'banana': 2000, 'grape': 3000}`
