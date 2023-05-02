@@ -1,0 +1,94 @@
+---
+title: '[자료구조] javascript 트리 (Tree)'
+date: '2023-05-02'
+tags: ['javascript', 'code', 'data structure']
+draft: false
+summary: javascript 에서 트리 자료구조에 대해서 알아보자
+---
+
+### javascript 에서 트리 자료구조에 대해서 알아보자
+
+#### 트리구조의 특징
+
+- 루트 정점을 제외한 모든 정점은 반드시 하나의 부모 정점을 가진다.
+- 정점이 N개인 트리는 반드시 N-1개의 간선을 가진다.
+- 루트에서 특정 정점으로 가는 경로는 유일하다.
+
+#### 이진트리
+
+- 이진트리 종류: 완전 이진트리, 포화 이진트리, 편향 트리
+
+<img
+  width="623"
+  alt="스크린샷 2023-05-02 오후 4 03 29"
+  src="https://user-images.githubusercontent.com/50010735/235601197-6e3919b6-5e07-4ecd-8561-596bf60eefa0.png"
+/>
+
+#### 이진트리 특징
+
+- 정점이 N개인 이진트리는 최악의 경우 높이가 N이 될수있다. (편향트리일 경우)
+- 정점이 N개인 포화 또는 완전 이진트리의 높이는 log N 이다.
+- 높이가 a인 포화 이진트리는 2ª - 1 개의 정점을 가진다.
+- 일반적인 이진 트리를 사용하는 경우는 많지 않다. 다음 자료구조에 응용된다. (이진트리 탐색, 힙, AVL 트리, 레드 블랙 트리)
+
+#### 이진트리 구현
+
+```tsx
+class TreeNode {
+  constructor(value) {
+    this.value = value
+    this.children = []
+  }
+
+  addChild(node) {
+    if (!(node instanceof TreeNode)) {
+      throw new Error('You can only add instances of TreeNode as children')
+    }
+    this.children.push(node)
+  }
+}
+
+class Tree {
+  constructor() {
+    this.root = null
+  }
+
+  setRoot(node) {
+    if (!(node instanceof TreeNode)) {
+      throw new Error('You can only add instances of TreeNode as the root')
+    }
+    this.root = node
+  }
+
+  traverseDF(callback) {
+    function recurse(node) {
+      for (let i = 0; i < node.children.length; i++) {
+        recurse(node.children[i])
+      }
+      callback(node)
+    }
+    recurse(this.root)
+  }
+
+  traverseBF(callback) {
+    const queue = new Queue()
+    queue.enqueue(this.root)
+    let currentNode = queue.dequeue()
+    while (currentNode) {
+      for (let i = 0; i < currentNode.children.length; i++) {
+        queue.enqueue(currentNode.children[i])
+      }
+      callback(currentNode)
+      currentNode = queue.dequeue()
+    }
+  }
+}
+```
+
+### 활용 예시
+
+#### 계층적 데이터, 정렬된 데이터, 검색이 빈번한 데이터 등
+
+- 계층적 데이터: 조직도, 디렉토리 구조 등
+- 정렬된 데이터: 이진 탐색 트리, AVL 트리, 레드-블랙 트리 등
+- 검색이 빈번한 데이터: 데이터베이스 인덱스 등
