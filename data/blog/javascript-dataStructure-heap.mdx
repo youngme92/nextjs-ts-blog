@@ -1,0 +1,85 @@
+---
+title: '[자료구조] javascript 힙 (Heap)'
+date: '2023-05-17'
+tags: ['javascript', 'code', 'data structure']
+draft: false
+summary: javascript 에서 힙 자료구조에 대해서 알아보자
+---
+
+### javascript 에서 힙 자료구조에 대해서 알아보자
+
+### 힙 구조의 특징
+
+<img width="568" alt="스크린샷 2023-05-17 오후 3 54 38" src="https://github.com/youngme92/FrontEnd_Growing/assets/50010735/8aba92a6-71c6-456b-86ca-6b691371cf7a" />
+
+
+힙은 일종의 완전 이진 트리로서, 부모 노드와 자식 노드 간에 우선순위를 가진 관계를 갖습니다. 힙은 일반적으로 최대 힙 또는 최소 힙으로 구현되는데, 최대 힙은 부모 노드가 자식 노드보다 항상 큰 값을 가지는 구조이고, 최소 힙은 부모 노드가 자식 노드보다 항상 작은 값을 가지는 구조입니다. 
+
+### 우선순위 큐에 대해서
+
+우선순위 큐는 데이터를 저장하고 우선순위에 따라 원소를 정렬하는 추상 자료형입니다. (자료구조가 아님)
+
+우선순위 큐를 구현하는 방법은 힙 자료구조로 구현할 수 있습니다.
+
+하지만 javscript 에서 힙 자료구조는 직접구현하여 사용해야합니다.
+
+#### 힙 구현
+
+```tsx
+// 촤대 힙
+class MaxHeap {
+  constructor(){
+    this.heap = [null];
+  }
+  // 힙 요소 추가
+  push(value){
+    this.heap.push(value);
+    let currentIndex = this.heap.length -1;
+    let parentIndex = Math.floor(currentIndex / 2);
+
+    while(parentIndex !== 0 && this.heap[parentIndex] < value){
+      const temp = this.heap[parentIndex];
+      this.heap[parentIndex] = value;
+      this.heap[currentIndex] = temp;
+
+      currentIndex = parentIndex;
+      parentIndex = Math.floor(currentIndex / 2);
+    }
+  }
+  // 힙 요소 제거
+  pop(){
+    const returnValue = this.heap[1];
+    this.heap[1] = this.heap.pop();
+
+    let currentIndex = 1;
+    let leftIndex = 2;
+    let rightIndex = 3;
+    while(
+      this.heap[currentIndex] < this.heap[leftIndex] ||
+      this.heap[currentIndex] < this.heap[rightIndex]
+    ){
+      if(this.heap[leftIndex] < this.heap[rightIndex]){
+        const temp = this.heap[currentIndex];
+        this.heap[currentIndex] = this.heap[rightIndex];
+        this.heap[leftIndex] = temp;
+        currentIndex = leftIndex;
+      }
+      leftIndex = currentIndex * 2;
+      rightIndex = currentIndex * 2 + 1;
+    }
+    return returnValue;
+  }
+}
+
+const heap = new MaxHeap()
+heap.push(100)
+heap.push(10)
+heap.pop()
+```
+
+
+### 활용 예시
+
+#### 우선순위 큐, 다익스트라 알고리즘 등
+- 우선순위 큐: 우선순위가 높은 데이터를 먼저 꺼내기 위해 사용됨
+- 다익스트라 알고리즘: 최단 경로를 찾는 알고리즘에서 사용됨
