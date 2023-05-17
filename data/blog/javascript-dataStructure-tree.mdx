@@ -15,80 +15,123 @@ summary: javascript 에서 트리 자료구조에 대해서 알아보자
 - 루트에서 특정 정점으로 가는 경로는 유일하다.
 
 #### 이진트리
+- 이진트리 종류: 완전 이진트리, 포화 이진트리, 편향 트리 
 
-- 이진트리 종류: 완전 이진트리, 포화 이진트리, 편향 트리
-
-<img
-  width="623"
-  alt="스크린샷 2023-05-02 오후 4 03 29"
-  src="https://user-images.githubusercontent.com/50010735/235601197-6e3919b6-5e07-4ecd-8561-596bf60eefa0.png"
-/>
+<img width="623" alt="스크린샷 2023-05-02 오후 4 03 29" src="https://user-images.githubusercontent.com/50010735/235601197-6e3919b6-5e07-4ecd-8561-596bf60eefa0.png" />
 
 #### 이진트리 특징
-
 - 정점이 N개인 이진트리는 최악의 경우 높이가 N이 될수있다. (편향트리일 경우)
 - 정점이 N개인 포화 또는 완전 이진트리의 높이는 log N 이다.
 - 높이가 a인 포화 이진트리는 2ª - 1 개의 정점을 가진다.
 - 일반적인 이진 트리를 사용하는 경우는 많지 않다. 다음 자료구조에 응용된다. (이진트리 탐색, 힙, AVL 트리, 레드 블랙 트리)
 
+**이진 탐색 트리 조건**
+- 부모 노드의 왼쪽 노드는 부모 노드보다 작아야 한다.
+- 부모 노드의 오른쪽 노드는 부모 노드보다 커야 한다.
+
 #### 이진트리 구현
 
 ```tsx
-class TreeNode {
+// 이진 트리 노드 클래스 정의
+class Node {
   constructor(value) {
-    this.value = value
-    this.children = []
-  }
-
-  addChild(node) {
-    if (!(node instanceof TreeNode)) {
-      throw new Error('You can only add instances of TreeNode as children')
-    }
-    this.children.push(node)
+    this.value = value;
+    this.left = null;
+    this.right = null;
   }
 }
 
-class Tree {
+// 이진 트리 클래스 정의
+class BinaryTree {
   constructor() {
-    this.root = null
+    this.root = null;
   }
 
-  setRoot(node) {
-    if (!(node instanceof TreeNode)) {
-      throw new Error('You can only add instances of TreeNode as the root')
+  // 노드 삽입 메서드
+  insert(value) {
+    const newNode = new Node(value);
+
+    if (this.root === null) {
+      this.root = newNode;
+    } else {
+      this.insertNode(this.root, newNode);
     }
-    this.root = node
   }
 
-  traverseDF(callback) {
-    function recurse(node) {
-      for (let i = 0; i < node.children.length; i++) {
-        recurse(node.children[i])
+  // 노드 삽입 보조 메서드
+  insertNode(node, newNode) {
+    if (newNode.value < node.value) {
+      if (node.left === null) {
+        node.left = newNode;
+      } else {
+        this.insertNode(node.left, newNode);
       }
-      callback(node)
+    } else {
+      if (node.right === null) {
+        node.right = newNode;
+      } else {
+        this.insertNode(node.right, newNode);
+      }
     }
-    recurse(this.root)
   }
 
-  traverseBF(callback) {
-    const queue = new Queue()
-    queue.enqueue(this.root)
-    let currentNode = queue.dequeue()
-    while (currentNode) {
-      for (let i = 0; i < currentNode.children.length; i++) {
-        queue.enqueue(currentNode.children[i])
-      }
-      callback(currentNode)
-      currentNode = queue.dequeue()
+  // 트리 순회 메서드: 전위 순회 (루트-왼쪽-오른쪽)
+  preOrderTraversal(node) {
+    if (node !== null) {
+      console.log(node.value);
+      this.preOrderTraversal(node.left);
+      this.preOrderTraversal(node.right);
+    }
+  }
+
+  // 트리 순회 메서드: 중위 순회 (왼쪽-루트-오른쪽)
+  inOrderTraversal(node) {
+    if (node !== null) {
+      this.inOrderTraversal(node.left);
+      console.log(node.value);
+      this.inOrderTraversal(node.right);
+    }
+  }
+
+  // 트리 순회 메서드: 후위 순회 (왼쪽-오른쪽-루트)
+  postOrderTraversal(node) {
+    if (node !== null) {
+      this.postOrderTraversal(node.left);
+      this.postOrderTraversal(node.right);
+      console.log(node.value);
     }
   }
 }
+
+// 이진 트리 인스턴스 생성
+const binaryTree = new BinaryTree();
+
+// 값 삽입
+binaryTree.insert(10);
+binaryTree.insert(6);
+binaryTree.insert(14);
+binaryTree.insert(3);
+binaryTree.insert(8);
+binaryTree.insert(12);
+binaryTree.insert(16);
+
+// 전위 순회 출력
+console.log("전위 순회:");
+binaryTree.preOrderTraversal(binaryTree.root);
+
+// 중위 순회 출력
+console.log("중위 순회:");
+binaryTree.inOrderTraversal(binaryTree.root);
+
+// 후위 순회 출력
+console.log("후위 순회:");
+binaryTree.postOrderTraversal(binaryTree.root);
 ```
+
 
 ### 활용 예시
 
 #### 계층적 데이터, 정렬된 데이터, 검색이 빈번한 데이터 등
-
 - 계층적 데이터: 조직도, 디렉토리 구조 등
 - 정렬된 데이터: 이진 탐색 트리, AVL 트리, 레드-블랙 트리 등
 - 검색이 빈번한 데이터: 데이터베이스 인덱스 등
