@@ -9,7 +9,9 @@
     "serve": "next start",
     "analyze": "cross-env ANALYZE=true next build",
     "lint": "next lint --fix --dir pages --dir components --dir lib --dir layouts --dir scripts",
-    "vercel-deploy": "cross-env INIT_CWD=$PWD next build && cross-env NODE_OPTIONS='--experimental-json-modules' node -r esbuild-register ./scripts/postbuild.mjs && next export"
+    "vercel-deploy": "cross-env INIT_CWD=$PWD next build && cross-env NODE_OPTIONS='--experimental-json-modules' node -r esbuild-register ./scripts/postbuild.mjs && next export",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "dependencies": {
     "@next/bundle-analyzer": "13.1.6",
@@ -44,6 +46,13 @@
     "unist-util-visit": "^4.1.0"
   },
   "devDependencies": {
+    "@storybook/addon-essentials": "^7.0.20",
+    "@storybook/addon-interactions": "^7.0.20",
+    "@storybook/addon-links": "^7.0.20",
+    "@storybook/blocks": "^7.0.20",
+    "@storybook/nextjs": "^7.0.20",
+    "@storybook/react": "^7.0.20",
+    "@storybook/testing-library": "^0.0.14-next.2",
     "@svgr/webpack": "^6.3.1",
     "@types/react": "^18.0.18",
     "@typescript-eslint/eslint-plugin": "^5.36.2",
@@ -55,6 +64,7 @@
     "eslint-config-next": "13.1.6",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-storybook": "^0.6.12",
     "file-loader": "^6.0.0",
     "globby": "11.0.3",
     "husky": "^8.0.0",
@@ -62,6 +72,7 @@
     "lint-staged": "^13.0.0",
     "prettier": "^2.7.0",
     "prettier-plugin-tailwindcss": "^0.2.2",
+    "storybook": "^7.0.20",
     "typescript": "^4.8.3"
   },
   "lint-staged": {

@@ -16,6 +16,7 @@ module.exports = {
     'plugin:prettier/recommended',
     'next',
     'next/core-web-vitals',
+    'plugin:storybook/recommended',
   ],
   rules: {
     'prettier/prettier': 'error',
