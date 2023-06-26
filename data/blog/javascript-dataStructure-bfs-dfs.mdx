@@ -1,0 +1,140 @@
+---
+title: '[자료구조] javascript BFS, DFS 정렬'
+date: '2023-06-26'
+tags: ['javascript', 'code', 'data structure']
+draft: false
+summary: javascript 에서 BFS, DFS 정렬에 대해서 알아보자
+---
+
+### javascript 에서 BFS, DFS 정렬에 대해서 알아보자 
+
+## 목차
+1. BFS, DFS 란?
+2. BFS, DFS 특징
+3. BFS, DFS 구현
+4. 활용예시
+
+### BFS, DFS 란
+
+BFS(Breadth-First Search, 너비 우선 탐색)와 DFS(Depth-First Search, 깊이 우선 탐색)는 그래프 혹은 트리 탐색에 사용되는 알고리즘입니다. BFS는 시작 노드에서부터 가까운 노드를 먼저 탐색하는 방법으로, 루트 노드에서부터 깊이 차례로 이웃한 노드들을 방문합니다.
+
+### BFS, DFS 특징
+
+BFS는 큐(Queue)를 사용하여 노드 정보를 저장하며, 먼저 들어간 노드가 먼저 나오는 선입선출(FIFO) 구조입니다. 이웃한 노드를 모두 방문하고 나서 그 다음 깊이의 노드를 방문하게 되므로 최단 경로 문제를 해결하는데 적합합니다. DFS는 시작 노드에서 최대한 깊이 들어갈 수 있는 경로를 따라 탐색하는 방법입니다. DFS는 스택(Stack)을 사용하거나 재귀를 통해 구현할 수 있습니다. DFS는 한 경로를 최대한 깊게 탐색한 뒤, 이전 분기점으로 돌아와 다른 경로를 탐색합니다. DFS는 경로 탐색이나 미로 탈출 문제 등에 적합합니다.
+
+### BFS, DFS 구현
+
+지난번에 만들었던 그래프 클래스를 바탕으로 구현을 해보겠습니다.
+
+```tsx
+class Node {
+  constructor(id) {
+    this.id = id;
+    this.edges = [];
+  }
+}
+
+class Edge {
+  constructor(nodeId, weight) {
+    this.nodeId = nodeId;
+    this.weight = weight;
+  }
+}
+
+class Graph {
+  constructor() {
+    this.nodes = {};
+  }
+
+  addNode(id) {
+    this.nodes[id] = new Node(id);
+  }
+
+  addEdge(fromNode, toNode, weight) {
+    this.nodes[fromNode].edges.push(new Edge(toNode, weight));
+  }
+
+  dfs(startId) {
+    let visited = new Set();
+    let path = [];
+
+    const dfsRecursive = (nodeId) => {
+      if (visited.has(nodeId)) return;
+      visited.add(nodeId);
+      path.push(nodeId);
+
+      for (const edge of this.nodes[nodeId].edges) {
+        if (!visited.has(edge.nodeId)) {
+          console.log(`(${nodeId}, ${edge.nodeId}) edge weight: ${edge.weight}`);
+          dfsRecursive(edge.nodeId);
+        }
+      }
+    };
+
+    dfsRecursive(startId);
+    return path;
+  }
+  
+  bfs(startId) {
+    let visited = new Set();
+    let queue = [startId];
+    let path = [];
+
+    while (queue.length > 0) {
+      let nodeId = queue.shift();
+
+      if (!visited.has(nodeId)) {
+        visited.add(nodeId);
+        path.push(nodeId);
+
+        for (const edge of this.nodes[nodeId].edges) {
+          if (!visited.has(edge.nodeId)) {
+            console.log(`(${nodeId}, ${edge.nodeId}) edge weight: ${edge.weight}`);
+            queue.push(edge.nodeId);
+          }
+        }
+      }
+    }
+
+    return path;
+  }
+}
+
+
+const graph = new Graph();
+graph.addNode('A');
+graph.addNode('B');
+graph.addNode('C');
+graph.addNode('D');
+graph.addNode('E');
+graph.addNode('F');
+
+graph.addEdge('A', 'B', 1);
+graph.addEdge('A', 'C', 5);
+graph.addEdge('B', 'D', 3);
+graph.addEdge('B', 'E', 7);
+graph.addEdge('C', 'F', 2);
+graph.addEdge('E', 'F', 6);
+
+console.log(graph.dfs('A'));
+console.log(graph.bfs('A'));
+
+// ["A", "B", "D", "E", "F", "C"]
+// ["A", "B", "C", "D", "E", "F"]
+```
+
+### 활용예시
+
+#### DFS (깊이 우선 탐색):
+
+미로 찾기 문제: DFS는 한 경로를 최대한 깊게 탐색하기 때문에, 미로에서 출구까지의 경로를 찾는 문제에 효과적입니다. 주어진 구간에서 최대한 깊이 들어가 모든 경로를 완전히 탐색 후 돌아와서 다음 경로를 탐색하는 특성을 활용합니다.
+트리 구조에서 모든 노드를 방문하고자 할 때: 트리나 그래프에서 노드간의 관계(조상, 자손)에 초점을 맞추고자 하는 경우, DFS는 모든 노드를 차례대로 방문 가능하며 면접이 나올 수 있는 문제를 표현하는데 유용합니다.
+연결 요소(Connected Component) 찾기: 그래프가 여러 개의 연결 요소로 구성된 경우, DFS를 통해 해당 연결 요소들을 찾아내는 데 사용할 수 있습니다.
+
+#### BFS (너비 우선 탐색):
+
+최단 경로 문제: BFS는 특정 노드에서 시작하여 가장 가까운 노드부터 순서대로 방문합니다. 무게가 없는 간선의 경우, BFS를 통해 특정 노드까지의 최단 경로를 찾을 수 있습니다.
+네트워크 상에서 두 노드간의 최소 거리: 소셜 네트워크의 친구 추천 시스템과 같이, 두 노드 사이의 최소 거리를 찾기 위해 BFS를 이용할 수 있습니다. 시작 노드에서 출발해 목표 노드에 도달하는 가장 빠른 경로를 찾을 수 있습니다.
+이차원 격자 구조에서 최단 경로 찾기: 게임에서 가장 짧은 경로로 적을 피해 가기 등 이차원 격자 구조에서의 최단 경로 문제를 BFS로 효율적으로 해결할 수 있습니다.
+
+
